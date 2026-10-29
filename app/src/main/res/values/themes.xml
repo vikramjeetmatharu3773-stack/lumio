@@ -6,6 +6,7 @@
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
     </style>
+
     <style name="Theme.Lumio.Splash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/lumio_splash_bg</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
