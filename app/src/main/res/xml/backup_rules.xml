@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <include domain="sharedpref" path="." />
+    <include domain="database" path="lumio.db" />
+    <exclude domain="file" path="datastore/lumio_widgets.preferences_pb" />
+</full-backup-content>
