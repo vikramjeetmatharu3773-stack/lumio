@@ -22,7 +22,7 @@ object ArtworkThemeBuilder {
         val radius = (2 + 12 * blur.coerceIn(0f, 1f)).toInt()
         val art = if (songUri != null) ArtworkLoader.loadSync(context, songUri, 256) else null
 
-        val accent: Int
+        var accent: Int
         val colors: List<Int>
         if (art == null) {
             val hsv = FloatArray(3)

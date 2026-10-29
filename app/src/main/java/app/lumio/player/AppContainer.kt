@@ -43,8 +43,11 @@ class AppContainer(val app: Application) {
         // keep home-screen widgets in sync with playback (only on actual state changes, not initial emit)
         scope.launch {
             player.state
-                .drop(1) // skip the initial PlayerState() to avoid widget update during app launch
-                .map { Triple(it.current?.uri, it.isPlaying, it.shuffle) }
+                .filterIndexed { index, _ -> index > 0 } // skip initial PlayerState() to avoid widget update during app launch
+                .map { state ->
+                    val current = state.current
+                    Triple(current?.uri, state.isPlaying, if (state.isShuffleModeEnabled) "1" else "0")
+                }
                 .distinctUntilChanged()
                 .debounce(300)
                 .collect {
