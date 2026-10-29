@@ -2,6 +2,9 @@ package app.lumio.player
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Surface
+import android.view.WindowInsets
+import android.view.WindowInsetsController
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -21,9 +24,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val splash = installSplashScreen()
         splash.setKeepOnScreenCondition { !ready.value }
-        lifecycleScope.launch { delay(1800); ready.value = true } // safety: never hang on splash
+        lifecycleScope.launch { delay(1000); ready.value = true }
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        // 120 Hz support: request max surface refresh rate for smoother animations
+        window.setFrameRate(120f, Surface.FRAME_RATE_COMPATIBILITY_DEFAULT)
+        window.insetsController?.hide(WindowInsets.Type.systemBars())
         applicationContext.container.player.connect()
         handleIntent(intent)
         setContent { AppRoot(openPlayer) { ready.value = true } }
