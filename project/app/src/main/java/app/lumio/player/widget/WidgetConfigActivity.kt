@@ -76,6 +76,10 @@ class WidgetConfigActivity : ComponentActivity() {
                             SettingsSwitch("Show artwork", current.showArt, { cfg = current.copy(showArt = it) })
                             SettingsSwitch("Show controls", current.showControls, { cfg = current.copy(showControls = it) })
                         }
+                        SettingsSection("Buttons") {
+                            SettingsSlider("Button size", "${current.buttonSize} dp", current.buttonSize.toFloat(), 32f..80f, { cfg = current.copy(buttonSize = it.toInt()) })
+                            SettingsSlider("Button opacity", "${(current.buttonOpacity * 100).toInt()}%", current.buttonOpacity, 0.3f..1f, { cfg = current.copy(buttonOpacity = it) })
+                        }
                         Box(Modifier.fillMaxWidth().padding(16.dp), contentAlignment = Alignment.Center) {
                             GlassButton("Done", {
                                 lifecycleScope.launch {

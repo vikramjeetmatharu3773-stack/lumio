@@ -101,10 +101,10 @@ private fun WidgetBody(
                 if (cfg.showControls) {
                     Spacer(GlanceModifier.height(16.dp))
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Btn(R.drawable.ic_w_shuffle, "Shuffle", 40.dp, fg, actionRunCallback<ShuffleAction>()); Spacer(GlanceModifier.width(12.dp))
-                        Btn(R.drawable.ic_w_prev, "Previous", 44.dp, fg, actionRunCallback<PrevAction>()); Spacer(GlanceModifier.width(12.dp))
-                        Btn(if (playing) R.drawable.ic_w_pause else R.drawable.ic_w_play, "Play or pause", 60.dp, fg, actionRunCallback<PlayPauseAction>()); Spacer(GlanceModifier.width(12.dp))
-                        Btn(R.drawable.ic_w_next, "Next", 44.dp, fg, actionRunCallback<NextAction>())
+                        Btn(R.drawable.ic_w_shuffle, "Shuffle", cfg.buttonSize.dp, fg, cfg.buttonOpacity, actionRunCallback<ShuffleAction>()); Spacer(GlanceModifier.width(12.dp))
+                        Btn(R.drawable.ic_w_prev, "Previous", cfg.buttonSize.dp, fg, cfg.buttonOpacity, actionRunCallback<PrevAction>()); Spacer(GlanceModifier.width(12.dp))
+                        Btn(if (playing) R.drawable.ic_w_pause else R.drawable.ic_w_play, "Play or pause", (cfg.buttonSize * 1.3f).toInt().dp, fg, cfg.buttonOpacity, actionRunCallback<PlayPauseAction>()); Spacer(GlanceModifier.width(12.dp))
+                        Btn(R.drawable.ic_w_next, "Next", cfg.buttonSize.dp, fg, cfg.buttonOpacity, actionRunCallback<NextAction>())
                     }
                 }
             }
@@ -116,9 +116,9 @@ private fun WidgetBody(
                     if (cfg.showControls) {
                         Spacer(GlanceModifier.height(10.dp))
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Btn(R.drawable.ic_w_prev, "Previous", 38.dp, fg, actionRunCallback<PrevAction>()); Spacer(GlanceModifier.width(10.dp))
-                            Btn(if (playing) R.drawable.ic_w_pause else R.drawable.ic_w_play, "Play or pause", 48.dp, fg, actionRunCallback<PlayPauseAction>()); Spacer(GlanceModifier.width(10.dp))
-                            Btn(R.drawable.ic_w_next, "Next", 38.dp, fg, actionRunCallback<NextAction>())
+                            Btn(R.drawable.ic_w_prev, "Previous", cfg.buttonSize.dp, fg, cfg.buttonOpacity, actionRunCallback<PrevAction>()); Spacer(GlanceModifier.width(10.dp))
+                            Btn(if (playing) R.drawable.ic_w_pause else R.drawable.ic_w_play, "Play or pause", (cfg.buttonSize * 1.1f).toInt().dp, fg, cfg.buttonOpacity, actionRunCallback<PlayPauseAction>()); Spacer(GlanceModifier.width(10.dp))
+                            Btn(R.drawable.ic_w_next, "Next", cfg.buttonSize.dp, fg, cfg.buttonOpacity, actionRunCallback<NextAction>())
                         }
                     }
                 }
@@ -127,7 +127,7 @@ private fun WidgetBody(
                 Row(GlanceModifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                     if (art != null) Image(ImageProvider(art), null, GlanceModifier.size(52.dp), contentScale = ContentScale.Fit) else Image(ImageProvider(R.drawable.ic_w_note), null, GlanceModifier.size(40.dp), colorFilter = ColorFilter.tint(fgProv))
                     Spacer(GlanceModifier.defaultWeight())
-                    if (cfg.showControls) Btn(if (playing) R.drawable.ic_w_pause else R.drawable.ic_w_play, "Play or pause", 48.dp, fg, actionRunCallback<PlayPauseAction>())
+                    if (cfg.showControls) Btn(if (playing) R.drawable.ic_w_pause else R.drawable.ic_w_play, "Play or pause", (cfg.buttonSize * 1.3f).toInt().dp, fg, cfg.buttonOpacity, actionRunCallback<PlayPauseAction>())
                 }
                 Spacer(GlanceModifier.height(8.dp))
                 Text(title, style = TextStyle(color = fgProv, fontSize = 13.sp, fontWeight = FontWeight.Bold), maxLines = 1)
@@ -138,9 +138,9 @@ private fun WidgetBody(
 }
 
 @Composable
-private fun Btn(icon: Int, desc: String, size: androidx.compose.ui.unit.Dp, tint: Color, action: androidx.glance.action.Action) {
+private fun Btn(icon: Int, desc: String, size: androidx.compose.ui.unit.Dp, tint: Color, opacity: Float, action: androidx.glance.action.Action) {
     Box(GlanceModifier.size(size).background(ImageProvider(R.drawable.w_btn_bg)).clickable(action), contentAlignment = Alignment.Center) {
-        Image(ImageProvider(icon), desc, GlanceModifier.size(size * 0.55f), colorFilter = ColorFilter.tint(ColorProvider(tint)))
+        Image(ImageProvider(icon), desc, GlanceModifier.size(size * 0.55f), colorFilter = ColorFilter.tint(ColorProvider(tint.copy(alpha = tint.alpha * opacity))))
     }
 }
 

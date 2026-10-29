@@ -22,6 +22,8 @@ data class WidgetConfig(
     val text: WidgetText = WidgetText.AUTO,
     val showArt: Boolean = true,
     val showControls: Boolean = true,
+    val buttonSize: Int = 56,
+    val buttonOpacity: Float = 0.85f,
 ) {
     companion object {
         fun defaults(s: AppSettings) = WidgetConfig(bg = s.widgetBackground, opacity = s.widgetOpacity, corner = s.widgetCorner)
@@ -42,6 +44,8 @@ class WidgetConfigStore(private val context: Context) {
             text = p[stringPreferencesKey("w${id}_text")]?.let { v -> WidgetText.entries.firstOrNull { it.name == v } } ?: d.text,
             showArt = p[booleanPreferencesKey("w${id}_art")] ?: d.showArt,
             showControls = p[booleanPreferencesKey("w${id}_controls")] ?: d.showControls,
+            buttonSize = p[intPreferencesKey("w${id}_btnSize")] ?: d.buttonSize,
+            buttonOpacity = p[floatPreferencesKey("w${id}_btnOpacity")] ?: d.buttonOpacity,
         )
     }
 
@@ -54,6 +58,8 @@ class WidgetConfigStore(private val context: Context) {
             p[stringPreferencesKey("w${id}_text")] = c.text.name
             p[booleanPreferencesKey("w${id}_art")] = c.showArt
             p[booleanPreferencesKey("w${id}_controls")] = c.showControls
+            p[intPreferencesKey("w${id}_btnSize")] = c.buttonSize
+            p[floatPreferencesKey("w${id}_btnOpacity")] = c.buttonOpacity
         }
     }
 

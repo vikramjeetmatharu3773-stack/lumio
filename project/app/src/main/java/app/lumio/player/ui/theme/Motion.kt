@@ -11,7 +11,7 @@ import androidx.compose.runtime.compositionLocalOf
 
 /** Central motion tokens. Spec: docs/05_ANIMATIONS_AND_MOTION.md */
 @Immutable
-class MotionSpec(val enabled: Boolean = true, val speed: Float = 1f, val haptics: Boolean = true) {
+class MotionSpec(val enabled: Boolean = true, val speed: Float = 1.5f, val haptics: Boolean = true) {
     private val k get() = speed.coerceIn(0.5f, 2f)
 
     fun ms(base: Int): Int = if (!enabled) 0 else (base / k).toInt()

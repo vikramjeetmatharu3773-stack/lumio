@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val splash = installSplashScreen()
         splash.setKeepOnScreenCondition { !ready.value }
-        lifecycleScope.launch { delay(1000); ready.value = true }
+        lifecycleScope.launch { delay(600); ready.value = true }
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         // Smoother experience: faster splash + edge-to-edge
