@@ -193,22 +193,34 @@ class MediaScanner(
                 try {
                     val id = c.getLong(iId)
                     val display = c.getString(iName) ?: ""
-                    val folder = if (iRel >= 0 && iVol >= 0) FolderUtils.keyFromRelative(c.getString(iVol), c.getString(iRel))
+                    val vol = if (iVol >= 0) c.getString(iVol) else null
+                    val rel = if (iRel >= 0) c.getString(iRel) else null
+                    val folder = if (vol != null && rel != null) FolderUtils.keyFromRelative(vol, rel)
                     else FolderUtils.keyFromData(if (iData >= 0) c.getString(iData) else null)
+                    val titleRaw = c.getString(iTitle)
+                    val artistRaw = c.getString(iArtist)
+                    val albumRaw = c.getString(iAlbum)
+                    val genreRaw = if (iGenre >= 0) c.getString(iGenre) else null
+                    val dur = if (!c.isNull(iDur)) c.getLong(iDur) else 0L
+                    val track = if (!c.isNull(iTrack)) c.getInt(iTrack) % 1000 else 0
+                    val year = if (!c.isNull(iYear)) c.getInt(iYear).coerceAtLeast(0) else 0
+                    val added = if (!c.isNull(iAdded)) c.getLong(iAdded) * 1000L else 0L
+                    val size = if (!c.isNull(iSize)) c.getLong(iSize) else 0L
+                    val mime = if (!c.isNull(iMime)) c.getString(iMime) else "audio/*"
                     onSong(
                         SongEntity(
                             uri = ContentUris.withAppendedId(media, id).toString(),
-                            title = clean(c.getString(iTitle), display.substringBeforeLast('.')),
-                            artist = clean(c.getString(iArtist), "Unknown artist"),
-                            album = clean(c.getString(iAlbum), "Unknown album"),
-                            albumId = c.getLong(iAlbumId),
-                            genre = if (iGenre >= 0) clean(c.getString(iGenre), "") else "",
-                            durationMs = c.getLong(iDur),
-                            track = c.getInt(iTrack) % 1000,
-                            year = c.getInt(iYear).coerceAtLeast(0),
-                            dateAdded = c.getLong(iAdded) * 1000L,
-                            sizeBytes = c.getLong(iSize),
-                            mimeType = c.getString(iMime) ?: "audio/*",
+                            title = clean(titleRaw, display.substringBeforeLast('.')),
+                            artist = clean(artistRaw, "Unknown artist"),
+                            album = clean(albumRaw, "Unknown album"),
+                            albumId = if (!c.isNull(iAlbumId)) c.getLong(iAlbumId) else 0L,
+                            genre = clean(genreRaw, ""),
+                            durationMs = dur,
+                            track = track,
+                            year = year,
+                            dateAdded = added,
+                            sizeBytes = size,
+                            mimeType = mime,
                             folderPath = folder,
                             displayName = display,
                             source = 0,
