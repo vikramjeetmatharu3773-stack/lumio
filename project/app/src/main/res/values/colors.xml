@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="lumio_bg">#FF07070D</color>
+    <color name="lumio_splash_bg">#FF0B1030</color>
+    <color name="lumio_accent">#FF7C8CFF</color>
+</resources>

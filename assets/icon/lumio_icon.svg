@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 108" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="108" y2="108">
+      <stop offset="0" stop-color="#0B1030"/><stop offset="0.55" stop-color="#2E1A7A"/><stop offset="1" stop-color="#6A3DFF"/>
+    </linearGradient>
+    <radialGradient id="cyan" gradientUnits="userSpaceOnUse" cx="86" cy="94" r="64">
+      <stop offset="0" stop-color="#00E5FF" stop-opacity="0.6"/><stop offset="1" stop-color="#00E5FF" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="magenta" gradientUnits="userSpaceOnUse" cx="18" cy="14" r="56">
+      <stop offset="0" stop-color="#FF4FD8" stop-opacity="0.5"/><stop offset="1" stop-color="#FF4FD8" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="halo" gradientUnits="userSpaceOnUse" cx="54" cy="54" r="34">
+      <stop offset="0.7" stop-color="#fff" stop-opacity="0.2"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="orb" gradientUnits="userSpaceOnUse" x1="30" y1="26" x2="78" y2="84">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.47"/><stop offset="1" stop-color="#fff" stop-opacity="0.09"/>
+    </linearGradient>
+    <radialGradient id="glow" gradientUnits="userSpaceOnUse" cx="64" cy="66" r="20">
+      <stop offset="0" stop-color="#00E5FF" stop-opacity="0.27"/><stop offset="1" stop-color="#00E5FF" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="rim" gradientUnits="userSpaceOnUse" x1="30" y1="26" x2="78" y2="84">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.95"/><stop offset="0.5" stop-color="#fff" stop-opacity="0.08"/><stop offset="1" stop-color="#fff" stop-opacity="0.5"/>
+    </linearGradient>
+    <linearGradient id="note" gradientUnits="userSpaceOnUse" x1="54" y1="36" x2="54" y2="66">
+      <stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#CFDBFF"/>
+    </linearGradient>
+  </defs>
+  <rect width="108" height="108" fill="url(#bg)"/>
+  <rect width="108" height="108" fill="url(#cyan)"/>
+  <rect width="108" height="108" fill="url(#magenta)"/>
+  <circle cx="54" cy="54" r="34" fill="url(#halo)"/>
+  <circle cx="54" cy="54" r="27" fill="url(#orb)"/>
+  <circle cx="64" cy="66" r="20" fill="url(#glow)"/>
+  <circle cx="54" cy="54" r="27" fill="none" stroke="url(#rim)" stroke-width="1.4"/>
+  <path d="M32,45A24,24 0 0 1 45,32" fill="none" stroke="#fff" stroke-opacity="0.85" stroke-width="2.4" stroke-linecap="round"/>
+  <path fill="url(#note)" d="M41.3,64.71A5,3.8 -20 1,0 50.7,61.29A5,3.8 -20 1,0 41.3,64.71ZM57.3,60.71A5,3.8 -20 1,0 66.7,57.29A5,3.8 -20 1,0 57.3,60.71ZM49.3,41L51.1,41L51.1,62L49.3,62ZM65.3,37L67.1,37L67.1,58L65.3,58ZM49.3,41L67.1,37L67.1,42L49.3,46Z"/>
+</svg>

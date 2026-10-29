@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <!-- soft halo -->
+    <path android:pathData="M20,54a34,34 0 1,0 68,0a34,34 0 1,0 -68,0z">
+        <aapt:attr name="android:fillColor">
+            <gradient android:type="radial" android:centerX="54" android:centerY="54" android:gradientRadius="34">
+                <item android:offset="0.7" android:color="#33FFFFFF" />
+                <item android:offset="1" android:color="#00FFFFFF" />
+            </gradient>
+        </aapt:attr>
+    </path>
+    <!-- glass orb body -->
+    <path android:pathData="M27,54a27,27 0 1,0 54,0a27,27 0 1,0 -54,0z">
+        <aapt:attr name="android:fillColor">
+            <gradient android:type="linear" android:startX="30" android:startY="26" android:endX="78" android:endY="84">
+                <item android:offset="0" android:color="#78FFFFFF" />
+                <item android:offset="1" android:color="#16FFFFFF" />
+            </gradient>
+        </aapt:attr>
+    </path>
+    <!-- cyan glow inside lower right -->
+    <path android:pathData="M42,64a20,20 0 1,0 40,0a20,20 0 1,0 -40,0z">
+        <aapt:attr name="android:fillColor">
+            <gradient android:type="radial" android:centerX="64" android:centerY="66" android:gradientRadius="20">
+                <item android:offset="0" android:color="#4400E5FF" />
+                <item android:offset="1" android:color="#0000E5FF" />
+            </gradient>
+        </aapt:attr>
+    </path>
+    <!-- rim light -->
+    <path android:pathData="M27,54a27,27 0 1,0 54,0a27,27 0 1,0 -54,0z" android:strokeWidth="1.4">
+        <aapt:attr name="android:strokeColor">
+            <gradient android:type="linear" android:startX="30" android:startY="26" android:endX="78" android:endY="84">
+                <item android:offset="0" android:color="#F2FFFFFF" />
+                <item android:offset="0.5" android:color="#14FFFFFF" />
+                <item android:offset="1" android:color="#80FFFFFF" />
+            </gradient>
+        </aapt:attr>
+    </path>
+    <!-- specular arc -->
+    <path android:pathData="M32,45A24,24 0 0 1 45,32" android:strokeColor="#D9FFFFFF"
+        android:strokeWidth="2.4" android:strokeLineCap="round" />
+    <!-- beamed eighth notes -->
+    <path android:pathData="M41.3,64.71A5,3.8 -20 1,0 50.7,61.29A5,3.8 -20 1,0 41.3,64.71ZM57.3,60.71A5,3.8 -20 1,0 66.7,57.29A5,3.8 -20 1,0 57.3,60.71ZM49.3,41L51.1,41L51.1,62L49.3,62ZM65.3,37L67.1,37L67.1,58L65.3,58ZM49.3,41L67.1,37L67.1,42L49.3,46Z">
+        <aapt:attr name="android:fillColor">
+            <gradient android:type="linear" android:startX="54" android:startY="36" android:endX="54" android:endY="66">
+                <item android:offset="0" android:color="#FFFFFFFF" />
+                <item android:offset="1" android:color="#FFCFDBFF" />
+            </gradient>
+        </aapt:attr>
+    </path>
+</vector>

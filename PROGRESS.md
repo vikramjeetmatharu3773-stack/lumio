@@ -1,0 +1,29 @@
+# PROGRESS (Hermes: tick after each task, add a one-line note)
+
+- [ ] T00 Environment + Gradle wrapper + first build
+- [ ] T01 Compile-fix loop (scaffold -> BUILD SUCCESSFUL)
+- [ ] T02 Branding: name/package, icon, splash, strings, fonts
+- [ ] T03 Database verification + schema export + DAO tests
+- [ ] T04 Settings repository verification + DataStore tests
+- [ ] T05 Permissions + MediaStore scanner
+- [ ] T06 Folder scanning (SAF include/exclude, deep scan, .nomedia, auto-rescan)
+- [ ] T07 Playback service + controller (queue, resume, notification)
+- [ ] T08 Audio effects (EQ, bass, virtualizer, loudness) + presets
+- [ ] T09 Sleep timer, fade, speed/pitch, skip silence
+- [ ] T10 Glass design system hardening (backdrop, a11y fallback, perf)
+- [ ] T11 Home screen
+- [ ] T12 Library screens (tabs, sort, fast scroller, multi-select)
+- [ ] T13 Collection detail screens + song options sheet
+- [ ] T14 Search
+- [ ] T15 Now Playing (gestures, seek bar, lyrics, queue)
+- [ ] T16 Playlists (create/edit/reorder, M3U import/export, smart playlists)
+- [ ] T17 Settings (all sub-screens)
+- [ ] T18 Customization (theme editor, presets, live preview, backup/restore)
+- [ ] T19 Widgets (all sizes, config activity)
+- [ ] T20 Stats, History, Favorites
+- [ ] T21 Lyrics import, tag editor, delete, set-as-ringtone
+- [ ] T22 Media integrations (Bluetooth, headset, Android Auto, shortcuts, QS tile)
+- [ ] T23 Performance + accessibility + localization
+- [ ] T24 Automated tests
+- [ ] T25 Release build, signing, R8, Play assets
+- [ ] T26 Final animation + polish pass

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Lumio</string>
+    <string name="tagline">Your music. Pure glass.</string>
+    <string name="widget_description">Liquid-glass now playing controls</string>
+    <string name="widget_config_title">Customize widget</string>
+    <string name="notif_channel_playback">Playback</string>
+    <string name="cd_play">Play</string>
+    <string name="cd_pause">Pause</string>
+    <string name="cd_next">Next</string>
+    <string name="cd_previous">Previous</string>
+    <string name="cd_shuffle">Shuffle</string>
+    <string name="cd_repeat">Repeat</string>
+    <string name="cd_favorite">Favorite</string>
+    <string name="cd_search">Search</string>
+    <string name="cd_home">Home</string>
+    <string name="cd_library">Library</string>
+    <string name="cd_settings">Settings</string>
+    <string name="cd_back">Back</string>
+    <string name="cd_more">More options</string>
+    <!-- TODO(T23): move remaining hard-coded UI strings from screens into this file. -->
+</resources>

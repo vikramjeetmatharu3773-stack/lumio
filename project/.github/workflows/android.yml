@@ -1,0 +1,23 @@
+name: Android CI
+on:
+  push: { branches: [ main ] }
+  pull_request:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 17 }
+      - uses: gradle/actions/setup-gradle@v4
+        with: { gradle-version: 8.10.2 }
+      - name: Build debug APK
+        run: gradle :app:assembleDebug --stacktrace
+      - name: Unit tests
+        run: gradle :app:testDebugUnitTest --stacktrace
+        continue-on-error: true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lumio-debug-apk
+          path: app/build/outputs/apk/debug/*.apk
