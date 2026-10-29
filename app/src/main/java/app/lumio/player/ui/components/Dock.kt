@@ -14,11 +14,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.Dp
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.animateFloatAsState
 import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -64,10 +61,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.lumio.player.data.model.Song
 import app.lumio.player.data.settings.DockStyle
 import app.lumio.player.ui.theme.LocalMotion
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.StateFlow
-import kotlin.math.abs
-import kotlin.math.sin
 
 /** Floating glass dock. STACKED = mini player above a 3-button capsule. CLASSIC = Home | mini player | Search (Echo-like). */
 @Composable
@@ -181,30 +175,23 @@ fun MiniPlayer(
 
 @Composable
 private fun MusicBeatLine(modifier: Modifier = Modifier, playing: Boolean = true) {
-    val t by animateFloatAsState(
-        targetValue = 6.28f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 1500, easing = LinearOutSlowInEasing),
-            repeatMode = RepeatMode.RESTART,
-        ),
-    )
-    Canvas(modifier) {
-        val w = size.width
-        val h = size.height
-        val accent = MaterialTheme.colorScheme.primary
-        val barW = 2f
-        val barGap = 3f
-        val count = (w / (barW + barGap)).toInt().coerceAtLeast(4).coerceAtMost(12)
-        repeat(count) { i ->
-            val x = i.toFloat() * (barW + barGap) + barGap / 2
-            val beat = abs(sin(t + i * 0.7f)).coerceIn(0.3f, 1f)
-            val barH = h * beat
-            val y = (h - barH) / 2f
-            drawRect(
-                accent.copy(alpha = 0.85f),
-                size = Size(barW, barH),
-                topLeft = Offset(x, y),
-            )
+    Box(modifier) {
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            val h = size.height
+            val accent = MaterialTheme.colorScheme.primary
+            val barW = 2f
+            val barGap = 3f
+            val count = (size.width / (barW + barGap)).toInt().coerceAtLeast(4).coerceAtMost(12)
+            repeat(count) { i ->
+                val x = i.toFloat() * (barW + barGap) + barGap / 2
+                val barH = h * 0.6f
+                val y = (h - barH) / 2f
+                drawRect(
+                    color = accent.copy(alpha = 0.85f),
+                    size = androidx.compose.ui.geometry.Size(barW, barH),
+                    topLeft = androidx.compose.ui.geometry.Offset(x, y),
+                )
+            }
         }
     }
 }
