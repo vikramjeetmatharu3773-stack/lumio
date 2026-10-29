@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Core brand colors -->
+    <color name="lumio_bg">#FF07070D</color>
+    <color name="lumio_splash_bg">#FF07070D</color>
+    <color name="lumio_accent">#FF7C8CFF</color>
+
+    <!-- Glass / translucency layer colors -->
+    <color name="lumio_glass_bg">#CC15172A</color>
+    <color name="lumio_glass_border">#33FFFFFF</color>
+    <color name="lumio_glass_specular">#26FFFFFF</color>
+
+    <!-- Surface colors -->
+    <color name="lumio_surface">#FF0F111F</color>
+    <color name="lumio_surface_variant">#FF1A1C2E</color>
+
+    <!-- Text colors -->
+    <color name="lumio_text_primary">#FFF2F2F7</color>
+    <color name="lumio_text_secondary">#FF9DA7C9</color>
+    <color name="lumio_text_on_accent">#FF101018</color>
+
+    <!-- State / feedback -->
+    <color name="lumio_error">#FFFF6B6B</color>
+    <color name="lumio_outline">#33FFFFFF</color>
+
+    <!-- Light theme overrides (used by Theme.kt when not dark) -->
+    <color name="lumio_bg_light">#FFF3F4FA</color>
+    <color name="lumio_text_light">#FF14141C</color>
+</resources>

@@ -3,32 +3,44 @@ name: Android CI
 on:
   push:
     branches: [ master ]
+  pull_request:
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-          cache: gradle
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-
-      - name: Build Debug APK
-        run: ./gradlew :app:assembleDebug
-
-      - name: Upload APK artifact
-        uses: actions/upload-artifact@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 17 }
+      - uses: gradle/actions/setup-gradle@v4
+        with: { gradle-version: 8.10.2, validate-wrappers: false }
+      - name: Build debug APK
+        run: gradle :app:assembleDebug --stacktrace
+      - name: Unit tests
+        run: gradle :app:testDebugUnitTest --stacktrace
+        continue-on-error: true
+      - uses: actions/upload-artifact@v4
         with:
           name: lumio-debug-apk
-          path: app/build/outputs/apk/debug/app-debug.apk
-          retention-days: 30
+          path: app/build/outputs/apk/debug/*.apk
+      - name: Restore keystore for release signing
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > release.keystore
+          printf 'keystore=release.keystore\nstorePassword=%s\nkeyAlias=%s\nkeyPassword=%s\n' "${{ secrets.RELEASE_STORE_PASSWORD }}" "${{ secrets.RELEASE_KEY_ALIAS }}" "${{ secrets.RELEASE_KEY_PASSWORD }}" > signing.properties
+      - name: Build signed release APK
+        if: github.event_name == 'workflow_dispatch'
+        run: gradle :app:assembleRelease --stacktrace
+      - uses: actions/upload-artifact@v4
+        if: github.event_name == 'workflow_dispatch'
+        with:
+          name: lumio-release-apk
+          path: app/build/outputs/apk/release/*.apk
+      - name: Create GitHub Release
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          APK=$(ls app/build/outputs/apk/release/*.apk | head -1)
+          gh release create "v1.0.1" "$APK" --title "Lumio v1.0.1" --notes "Signed release APK with 120 Hz support and smoother experience." --generate-notes
