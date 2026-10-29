@@ -1,12 +1,5 @@
-*.iml
-.gradle/
-/local.properties
-/keystore.properties
-*.jks
 *.keystore
-.idea/
+signing.properties
+local.properties
+.gradle/
 build/
-captures/
-.externalNativeBuild/
-.cxx/
-build.log

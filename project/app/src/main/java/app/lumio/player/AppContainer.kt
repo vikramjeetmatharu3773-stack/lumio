@@ -13,6 +13,7 @@ import app.lumio.player.playback.PlayerController
 import app.lumio.player.playback.SleepTimerController
 import app.lumio.player.widget.NowPlayingWidget
 import androidx.glance.appwidget.updateAll
+import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
@@ -40,15 +41,19 @@ class AppContainer(val app: Application) {
     @OptIn(FlowPreview::class)
     fun start() {
         scanner.startObserving(scope)
-        // keep home-screen widgets in sync with playback
+        // keep home-screen widgets in sync with playback (try/catch protects against launch-time crashes)
         scope.launch {
-            player.state
-                .map { Triple(it.current?.uri, it.isPlaying, it.shuffle) }
-                .distinctUntilChanged()
-                .debounce(300)
-                .collect {
-                    try { NowPlayingWidget().updateAll(app) } catch (_: Exception) {}
-                }
+            try {
+                player.state
+                    .map { Triple(it.current?.uri, it.isPlaying, it.shuffle) }
+                    .distinctUntilChanged()
+                    .debounce(300)
+                    .collect {
+                        try { NowPlayingWidget().updateAll(app) } catch (_: Exception) {}
+                    }
+            } catch (e: Exception) {
+                Log.e("LumioApp", "player state collection failed at launch", e)
+            }
         }
     }
 }

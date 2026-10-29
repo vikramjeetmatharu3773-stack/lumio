@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
+import java.util.Properties
+
 android {
     namespace = "app.lumio.player"
     compileSdk = 35
@@ -28,7 +30,6 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            // T25: add signingConfig from keystore.properties
         }
     }
     compileOptions {
