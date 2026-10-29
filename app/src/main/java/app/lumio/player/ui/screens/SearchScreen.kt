@@ -55,6 +55,7 @@ fun SearchScreen(onNavigate: (String) -> Unit) {
     val genres by c.library.genres.collectAsStateWithLifecycle()
     var query by rememberSaveable { mutableStateOf("") }
     var filter by rememberSaveable { mutableIntStateOf(0) }
+    val sel = rememberSelection()
     val recents = remember(s.recentSearches) { s.recentSearches.split('\n').filter { it.isNotBlank() } }
 
     val results by produceState(SearchResults(), query) {
@@ -123,7 +124,7 @@ fun SearchScreen(onNavigate: (String) -> Unit) {
             } else {
                 if ((filter == 0 || filter == 1) && results.songs.isNotEmpty()) {
                     item { SectionHeader("Songs") }
-                    songItems(results.songs.take(if (filter == 0) 8 else 200), player.current?.uri, player.isPlaying, s.compactRows, rememberSelection(),
+                    songItems(results.songs.take(if (filter == 0) 8 else 200), player.current?.uri, player.isPlaying, s.compactRows, sel,
                         onPlayAt = { saveRecent(query); c.player.playSongs(results.songs, it, source = "Search") }, onMore = { overlays.songOptions = it })
                 }
                 if ((filter == 0 || filter == 2) && results.albums.isNotEmpty()) {
