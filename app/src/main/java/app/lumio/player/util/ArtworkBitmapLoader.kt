@@ -20,6 +20,6 @@ class ArtworkBitmapLoader(private val context: Context) : BitmapLoader {
 
     override fun loadBitmap(uri: Uri): ListenableFuture<Bitmap> =
         executor.submit<Bitmap> {
-            ArtworkLoader.loadSync(context, uri.toString(), 512) ?: throw IllegalStateException("no artwork")
+            ArtworkLoader.loadSync(context, uri.toString(), 512) ?: Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
         }
 }

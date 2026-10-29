@@ -107,7 +107,7 @@ fun AppRoot(openPlayerRequests: StateFlow<Int>) {
     var artTheme by remember { mutableStateOf<ArtworkTheme?>(null) }
     LaunchedEffect(currentUri, s.glassBlur, s.backdropStyle, s.customAccent, baseBg) {
         artTheme = withContext(Dispatchers.Default) {
-            ArtworkThemeBuilder.build(ctx, currentUri, s.glassBlur, s.backdropStyle, s.customAccent, baseBg.toArgb())
+            try { ArtworkThemeBuilder.build(ctx, currentUri, s.glassBlur, s.backdropStyle, s.customAccent, baseBg.toArgb()) } catch (_: Exception) { null }
         }
     }
     val backdropBitmap = remember(artTheme) { artTheme?.backdrop?.asImageBitmap() }

@@ -135,20 +135,24 @@ class MediaScanner(
 
     fun startObserving(scope: CoroutineScope) {
         if (observeJob != null) return
-        val handler = Handler(Looper.getMainLooper())
-        var pending: Job? = null
-        val observer = object : ContentObserver(handler) {
-            override fun onChange(selfChange: Boolean) {
-                pending?.cancel()
-                pending = scope.launch {
-                    delay(3000)
-                    val s = settings.current()
-                    if (s.autoScanOnChange && s.onboardingDone) scan(deep = false)
+        try {
+            val handler = Handler(Looper.getMainLooper())
+            var pending: Job? = null
+            val observer = object : ContentObserver(handler) {
+                override fun onChange(selfChange: Boolean) {
+                    pending?.cancel()
+                    pending = scope.launch {
+                        delay(3000)
+                        try {
+                            val s = settings.current()
+                            if (s.autoScanOnChange && s.onboardingDone) scan(deep = false)
+                        } catch (_: Exception) {}
+                    }
                 }
             }
-        }
-        context.contentResolver.registerContentObserver(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, true, observer)
-        observeJob = Job()
+            context.contentResolver.registerContentObserver(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, true, observer)
+            observeJob = Job()
+        } catch (_: Exception) {}
     }
 
     // ---------------- Stage 1: MediaStore ----------------

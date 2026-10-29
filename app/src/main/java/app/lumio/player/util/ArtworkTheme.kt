@@ -35,15 +35,27 @@ object ArtworkThemeBuilder {
                 Color.HSVToColor(floatArrayOf((hsv[0] + 300f) % 360f, 0.55f, 0.55f)),
             )
         } else {
-            val palette = Palette.from(art).maximumColorCount(16).generate()
-            val dominant = palette.getDominantColor(fallbackAccent)
-            accent = brighten(palette.getVibrantColor(palette.getLightVibrantColor(palette.getMutedColor(dominant))))
-            colors = listOf(
-                accent,
-                palette.getDarkVibrantColor(dominant),
-                palette.getMutedColor(dominant),
-                palette.getLightMutedColor(dominant),
-            )
+            try {
+                val palette = Palette.from(art).maximumColorCount(16).generate()
+                val dominant = palette.getDominantColor(fallbackAccent)
+                accent = brighten(palette.getVibrantColor(palette.getLightVibrantColor(palette.getMutedColor(dominant))))
+                colors = listOf(
+                    accent,
+                    palette.getDarkVibrantColor(dominant),
+                    palette.getMutedColor(dominant),
+                    palette.getLightMutedColor(dominant),
+                )
+            } catch (_: Exception) {
+                val hsv = FloatArray(3)
+                Color.colorToHSV(fallbackAccent, hsv)
+                accent = fallbackAccent
+                colors = listOf(
+                    fallbackAccent,
+                    Color.HSVToColor(floatArrayOf((hsv[0] + 70f) % 360f, 0.65f, 0.75f)),
+                    Color.HSVToColor(floatArrayOf((hsv[0] + 200f) % 360f, 0.60f, 0.60f)),
+                    Color.HSVToColor(floatArrayOf((hsv[0] + 300f) % 360f, 0.55f, 0.55f)),
+                )
+            }
         }
         val backdrop = when (style) {
             BackdropStyle.SOLID -> BitmapBlur.solid(baseBg)
