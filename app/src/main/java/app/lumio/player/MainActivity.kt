@@ -9,6 +9,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.WindowCompat
 import app.lumio.player.ui.nav.AppRoot
 import kotlinx.coroutines.flow.MutableStateFlow
 import androidx.lifecycle.lifecycleScope
@@ -27,8 +28,10 @@ class MainActivity : ComponentActivity() {
         lifecycleScope.launch { delay(1000); ready.value = true }
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        // 120 Hz support: request max surface refresh rate for smoother animations
-        window.setFrameRate(120f, Surface.FRAME_RATE_COMPATIBILITY_DEFAULT)
+        // 120 Hz support: request max surface refresh rate for smoother animations (API 30+)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            window.setFrameRate(120f, android.view.Surface.FRAME_RATE_COMPATIBILITY_DEFAULT)
+        }
         window.insetsController?.hide(WindowInsets.Type.systemBars())
         applicationContext.container.player.connect()
         handleIntent(intent)
