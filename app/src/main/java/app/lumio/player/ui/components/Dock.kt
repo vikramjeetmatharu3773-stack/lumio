@@ -163,23 +163,18 @@ fun MiniPlayer(
 
 @Composable
 private fun MusicBeatLine(modifier: Modifier = Modifier, playing: Boolean = true) {
-    Box(modifier) {
-        Canvas(modifier = Modifier.fillMaxSize()) {
-            val h = size.height
-            val accent = MaterialTheme.colorScheme.primary
-            val barW = 2f
-            val barGap = 3f
-            val count = (size.width / (barW + barGap)).toInt().coerceAtLeast(4).coerceAtMost(12)
-            repeat(count) { i ->
-                val x = i.toFloat() * (barW + barGap) + barGap / 2
-                val barH = h * 0.6f
-                val y = (h - barH) / 2f
-                drawRect(
-                    color = accent.copy(alpha = 0.85f),
-                    size = androidx.compose.ui.geometry.Size(barW, barH),
-                    topLeft = androidx.compose.ui.geometry.Offset(x, y),
-                )
-            }
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(3.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        repeat(4) { i ->
+            Box(
+                Modifier
+                    .width(2.dp)
+                    .height(12.dp)
+                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.85f), CircleShape)
+            )
         }
     }
 }
