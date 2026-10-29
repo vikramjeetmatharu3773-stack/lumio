@@ -40,14 +40,10 @@ class AppContainer(val app: Application) {
     @OptIn(FlowPreview::class)
     fun start() {
         scanner.startObserving(scope)
-        // keep home-screen widgets in sync with playback (only on actual state changes, not initial emit)
+        // keep home-screen widgets in sync with playback (try/catch protects against launch-time crashes)
         scope.launch {
             player.state
-                .filterIndexed { index, _ -> index > 0 } // skip initial PlayerState() to avoid widget update during app launch
-                .map { state ->
-                    val current = state.current
-                    Triple(current?.uri, state.isPlaying, if (state.isShuffleModeEnabled) "1" else "0")
-                }
+                .map { Triple(it.current?.uri, it.isPlaying, it.shuffle) }
                 .distinctUntilChanged()
                 .debounce(300)
                 .collect {
