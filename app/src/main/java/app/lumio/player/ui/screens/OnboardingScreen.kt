@@ -80,7 +80,12 @@ fun OnboardingScreen() {
         Text("Your music. Pure glass.", style = MaterialTheme.typography.bodyLarge, color = on.copy(alpha = 0.75f))
         Spacer(Modifier.height(28.dp))
 
-        AnimatedContent(step, label = "onboardStep") { s ->
+        AnimatedContent(
+            step,
+            label = "onboardStep",
+            enter = fadeIn(animationSpec = tween(300)),
+            exit = fadeOut(animationSpec = tween(200)),
+        ) { s ->
             Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
                 when (s) {
                     0 -> {
