@@ -17,6 +17,7 @@ import androidx.glance.LocalContext
 import androidx.glance.LocalSize
 import androidx.glance.action.ActionParameters
 import androidx.glance.action.clickable
+import androidx.glance.clip.GlanceClip
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
@@ -139,7 +140,13 @@ private fun WidgetBody(
 
 @Composable
 private fun Btn(icon: Int, desc: String, size: androidx.compose.ui.unit.Dp, tint: Color, action: androidx.glance.action.Action) {
-    Box(GlanceModifier.size(size).background(ImageProvider(R.drawable.w_btn_bg)).clickable(action), contentAlignment = Alignment.Center) {
+    Box(
+        GlanceModifier.size(size)
+            .background(ImageProvider(R.drawable.w_btn_bg))
+            .clip(GlanceClip.roundedCorners(size / 2))
+            .clickable(action),
+        contentAlignment = Alignment.Center
+    ) {
         Image(ImageProvider(icon), desc, GlanceModifier.size(size * 0.55f), colorFilter = ColorFilter.tint(ColorProvider(tint)))
     }
 }
