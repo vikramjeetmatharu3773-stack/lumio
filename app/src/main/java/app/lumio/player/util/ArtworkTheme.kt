@@ -23,7 +23,7 @@ object ArtworkThemeBuilder {
         val art = if (songUri != null) ArtworkLoader.loadSync(context, songUri, 256) else null
 
         var accent: Int
-        val colors: List<Int>
+        var colors: List<Int>
         if (art == null) {
             val hsv = FloatArray(3)
             Color.colorToHSV(fallbackAccent, hsv)
