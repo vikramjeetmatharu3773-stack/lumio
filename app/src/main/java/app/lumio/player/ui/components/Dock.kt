@@ -14,8 +14,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.Dp
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.animateFloatAsState
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.core.withFrameNanos
+import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -178,15 +181,13 @@ fun MiniPlayer(
 
 @Composable
 private fun MusicBeatLine(modifier: Modifier = Modifier, playing: Boolean = true) {
-    val t by remember { mutableFloatStateOf(0f) }
-    LaunchedEffect(playing) {
-        if (playing) {
-            while (true) {
-                withFrameNanos { _: Long -> t.value += 0.08f }
-                delay(16)
-            }
-        }
-    }
+    val t by animateFloatAsState(
+        targetValue = 6.28f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 1500, easing = LinearOutSlowInEasing),
+            repeatMode = RepeatMode.RESTART,
+        ),
+    )
     Canvas(modifier) {
         val w = size.width
         val h = size.height
