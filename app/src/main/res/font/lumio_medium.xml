@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<font-family xmlns:app="http://schemas.android.com/apk/res-auto">
-    <font app:fontStyle="normal" app:fontWeight="400" app:font="sans-serif-medium" />
-    <font app:fontStyle="normal" app:fontWeight="500" app:font="sans-serif-medium" />
-    <font app:fontStyle="normal" app:fontWeight="700" app:font="sans-serif-bold" />
-    <font app:fontStyle="italic" app:fontWeight="400" app:font="sans-serif-medium-italic" />
+<font-family xmlns:android="http://schemas.android.com/apk/res/android">
+    <font android:fontStyle="normal" android:fontWeight="400" android:font="sans-serif-medium" />
+    <font android:fontStyle="normal" android:fontWeight="500" android:font="sans-serif-medium" />
+    <font android:fontStyle="normal" android:fontWeight="700" android:font="sans-serif-bold" />
+    <font android:fontStyle="italic" android:fontWeight="400" android:font="sans-serif-medium-italic" />
 </font-family>
