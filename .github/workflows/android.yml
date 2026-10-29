@@ -28,12 +28,7 @@ jobs:
         if: github.event_name == 'workflow_dispatch'
         run: |
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > release.keystore
-          cat > signing.properties <<EOF
-keystore=release.keystore
-storePassword=${{ secrets.RELEASE_STORE_PASSWORD }}
-keyAlias=${{ secrets.RELEASE_KEY_ALIAS }}
-keyPassword=${{ secrets.RELEASE_KEY_PASSWORD }}
-EOF
+          printf 'keystore=release.keystore\nstorePassword=%s\nkeyAlias=%s\nkeyPassword=%s\n' "${{ secrets.RELEASE_STORE_PASSWORD }}" "${{ secrets.RELEASE_KEY_ALIAS }}" "${{ secrets.RELEASE_KEY_PASSWORD }}" > signing.properties
       - name: Build signed release APK
         if: github.event_name == 'workflow_dispatch'
         run: gradle :app:assembleRelease --stacktrace
