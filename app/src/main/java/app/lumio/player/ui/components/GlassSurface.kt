@@ -13,6 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.unit.Dp
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -47,7 +48,7 @@ import app.lumio.player.ui.theme.drawBackdrop
 @Composable
 fun GlassSurface(
     modifier: Modifier = Modifier,
-    shape: Shape = RoundedCornerShape(LocalGlass.current.corner.coerceAtLeast(0f)),
+    shape: Shape = RoundedCornerShape(LocalGlass.current.corner.coerceAtLeast(Dp.Zero)),
     style: GlassStyle = LocalGlass.current,
     tint: Color = Color.Unspecified,
     onClick: (() -> Unit)? = null,
