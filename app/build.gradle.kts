@@ -28,7 +28,21 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            // T25: add signingConfig from keystore.properties
+            signingConfig signingConfigs.release
+        }
+    }
+
+    signingConfigs {
+        create("release") {
+            val propsFile = rootProject.file("signing.properties")
+            val props = java.util.Properties()
+            if (propsFile.exists()) {
+                propsFile.inputStream().use { props.load(it) }
+            }
+            storeFile = file(props.getProperty("keystore", rootProject.file("release.keystore").absolutePath))
+            storePassword = props.getProperty("storePassword", "")
+            keyAlias = props.getProperty("keyAlias", "lumio")
+            keyPassword = props.getProperty("keyPassword", "")
         }
     }
     compileOptions {
