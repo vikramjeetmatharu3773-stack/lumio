@@ -5,7 +5,7 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.tween as composeTween
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.compositionLocalOf
 
@@ -17,7 +17,7 @@ class MotionSpec(val enabled: Boolean = true, val speed: Float = 1f, val haptics
     fun ms(base: Int): Int = if (!enabled) 0 else (base / k).toInt()
 
     fun <T> tween(base: Int, easing: Easing = FastOutSlowInEasing): FiniteAnimationSpec<T> =
-        if (!enabled) snap() else tween((base / k).toInt(), easing = easing)
+        if (!enabled) snap() else composeTween((base / k).toInt(), easing = easing)
 
     fun <T> bounce(): FiniteAnimationSpec<T> = if (!enabled) snap() else spring(dampingRatio = 0.55f, stiffness = 500f)
     fun <T> smooth(): FiniteAnimationSpec<T> = if (!enabled) snap() else spring(dampingRatio = 0.82f, stiffness = 380f)
