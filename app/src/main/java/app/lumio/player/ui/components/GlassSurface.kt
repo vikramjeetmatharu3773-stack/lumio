@@ -47,7 +47,7 @@ import app.lumio.player.ui.theme.drawBackdrop
 @Composable
 fun GlassSurface(
     modifier: Modifier = Modifier,
-    shape: Shape = RoundedCornerShape(LocalGlass.current.corner.coerceAtLeast(0)),
+    shape: Shape = RoundedCornerShape(LocalGlass.current.corner.coerceAtLeast(Dp(0))),
     style: GlassStyle = LocalGlass.current,
     tint: Color = Color.Unspecified,
     onClick: (() -> Unit)? = null,
