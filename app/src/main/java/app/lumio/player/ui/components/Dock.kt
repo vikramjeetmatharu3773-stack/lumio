@@ -3,16 +3,13 @@ package app.lumio.player.ui.components
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Size
-import androidx.compose.ui.graphics.drawScope.drawRoundRect
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.Dp
 import androidx.compose.animation.AnimatedVisibility
@@ -201,11 +198,10 @@ private fun MusicBeatLine(modifier: Modifier = Modifier, playing: Boolean = true
             val beat = abs(sin(t + i * 0.7f)).coerceIn(0.3f, 1f)
             val barH = h * beat
             val y = (h - barH) / 2f
-            drawRoundRect(
+            drawRect(
                 accent.copy(alpha = 0.85f),
                 size = Size(barW, barH),
                 topLeft = Offset(x, y),
-                cornerRadius = CornerRadius(barW / 2, barW / 2),
             )
         }
     }
