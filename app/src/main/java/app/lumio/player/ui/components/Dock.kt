@@ -48,6 +48,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.lumio.player.data.model.Song
 import app.lumio.player.data.settings.DockStyle
@@ -135,23 +140,20 @@ fun MiniPlayer(
         modifier = modifier.height(64.dp),
         shape = RoundedCornerShape(50),
         onClick = onClick,
+        pointerInput(Unit) {
+            var acc = 0f
+            detectHorizontalDragGestures(
+                onDragStart = { acc = 0f },
+                onDragEnd = { if (acc < -100f) onNext() else if (acc > 100f) onPrevious() },
+                onDragCancel = {},
+                onHorizontalDrag = { _, d -> acc += d },
+            )
+        },
     ) {
         Row(
-            Modifier
-                .fillMaxSize()
-                .pointerInput(Unit) {
-                    var acc = 0f
-                    detectHorizontalDragGestures(
-                        onDragStart = { acc = 0f },
-                        onDragEnd = { if (acc < -100f) onNext() else if (acc > 100f) onPrevious() },
-                        onDragCancel = {},
-                        onHorizontalDrag = { _, d -> acc += d },
-                    )
-                }
-                .padding(start = 10.dp, end = 6.dp),
+            Modifier.fillMaxSize().padding(start = 10.dp, end = 6.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            ArtworkImage(song.uri, Modifier.size(44.dp), CircleShape)
             Column(Modifier.weight(1f).padding(horizontal = 12.dp)) {
                 Text(song.title, style = MaterialTheme.typography.titleSmall, color = on, maxLines = 1, modifier = Modifier.basicMarquee())
                 Text(song.artist, style = MaterialTheme.typography.bodySmall, color = on.copy(alpha = 0.7f), maxLines = 1)
