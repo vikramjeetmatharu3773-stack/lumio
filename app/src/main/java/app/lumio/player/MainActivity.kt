@@ -28,10 +28,7 @@ class MainActivity : ComponentActivity() {
         lifecycleScope.launch { delay(1000); ready.value = true }
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        // 120 Hz support: request max surface refresh rate for smoother animations (API 30+)
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
-            window.setFrameRate(120f, android.view.Surface.FRAME_RATE_COMPATIBILITY_DEFAULT)
-        }
+        // Smoother experience: faster splash + edge-to-edge
         window.insetsController?.hide(WindowInsets.Type.systemBars())
         applicationContext.container.player.connect()
         handleIntent(intent)
