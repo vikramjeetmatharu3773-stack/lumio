@@ -14,8 +14,12 @@ class LumioApp : Application(), ImageLoaderFactory {
 
     override fun onCreate() {
         super.onCreate()
-        container = AppContainer(this)
-        container.start()
+        try {
+            container = AppContainer(this)
+            container.start()
+        } catch (e: Exception) {
+            android.util.Log.e("LumioApp", "AppContainer start failed", e)
+        }
     }
 
     override fun newImageLoader(): ImageLoader = ImageLoader.Builder(this)
