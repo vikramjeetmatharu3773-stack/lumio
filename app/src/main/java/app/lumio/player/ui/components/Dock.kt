@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.withFrameNanos
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -181,7 +182,7 @@ private fun MusicBeatLine(modifier: Modifier = Modifier, playing: Boolean = true
     LaunchedEffect(playing) {
         if (playing) {
             while (true) {
-                withFrameNanos { _: Long -> t += 0.08f }
+                withFrameNanos { _: Long -> t.value += 0.08f }
                 delay(16)
             }
         }
