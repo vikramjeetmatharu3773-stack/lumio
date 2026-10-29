@@ -58,7 +58,6 @@ import app.lumio.player.ui.screens.FoldersScreen
 import app.lumio.player.ui.screens.HomeScreen
 import app.lumio.player.ui.screens.LibraryScreen
 import app.lumio.player.ui.screens.NowPlayingSheet
-import app.lumio.player.ui.screens.OnboardingScreen
 import app.lumio.player.ui.screens.SearchScreen
 import app.lumio.player.ui.screens.SettingsAboutScreen
 import app.lumio.player.ui.screens.SettingsAppearanceScreen
@@ -78,7 +77,6 @@ import app.lumio.player.ui.theme.LumioTheme
 import app.lumio.player.ui.theme.drawBackdrop
 import app.lumio.player.util.ArtworkTheme
 import app.lumio.player.util.ArtworkThemeBuilder
-import app.lumio.player.util.rememberAudioPermission
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -111,7 +109,7 @@ fun AppRoot(openPlayerRequests: StateFlow<Int>) {
         }
     }
     val backdropBitmap = remember(artTheme) { artTheme?.backdrop?.asImageBitmap() }
-    val permissionGranted by rememberAudioPermission()
+    val permissionGranted = true
 
     LumioTheme(s, artTheme?.let { Color(it.accent) }, backdrop) {
         BackdropEffect(backdrop, backdropBitmap)
@@ -119,11 +117,7 @@ fun AppRoot(openPlayerRequests: StateFlow<Int>) {
             Modifier.fillMaxSize().layoutOnSizeChanged { backdrop.rootSize = it },
         ) {
             LiquidBackground(backdrop, baseBg, dark, s.themeMode == ThemeMode.AMOLED)
-            if (!s.onboardingDone || !permissionGranted) {
-                OnboardingScreen()
-            } else {
-                MainContent(s, openPlayerRequests)
-            }
+            MainContent(s, openPlayerRequests)
         }
     }
 }
