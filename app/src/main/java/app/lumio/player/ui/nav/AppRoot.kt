@@ -85,10 +85,11 @@ import kotlinx.coroutines.withContext
 import androidx.compose.ui.layout.onSizeChanged as layoutOnSizeChanged
 
 @Composable
-fun AppRoot(openPlayerRequests: StateFlow<Int>) {
+fun AppRoot(openPlayerRequests: StateFlow<Int>, onReady: () -> Unit = {}) {
     val ctx = LocalContext.current
     val c = ctx.container
     val loaded by remember { c.settings.flow.map<AppSettings, AppSettings?> { it } }.collectAsStateWithLifecycle(initialValue = null)
+    LaunchedEffect(loaded != null) { if (loaded != null) onReady() }
     val s = loaded ?: return Box(Modifier.fillMaxSize().drawBehind { drawRect(LumioColors.BgDark) })
 
     val systemDark = isSystemInDarkTheme()
@@ -104,8 +105,14 @@ fun AppRoot(openPlayerRequests: StateFlow<Int>) {
     val currentUri = player.current?.uri
     var artTheme by remember { mutableStateOf<ArtworkTheme?>(null) }
     LaunchedEffect(currentUri, s.glassBlur, s.backdropStyle, s.customAccent, baseBg) {
-        artTheme = withContext(Dispatchers.Default) {
-            try { ArtworkThemeBuilder.build(ctx, currentUri, s.glassBlur, s.backdropStyle, s.customAccent, baseBg.toArgb()) } catch (_: Exception) { null }
+        try {
+            artTheme = withContext(Dispatchers.Default) {
+                ArtworkThemeBuilder.build(ctx, currentUri, s.glassBlur, s.backdropStyle, s.customAccent, baseBg.toArgb())
+            }
+        } catch (e: kotlinx.coroutines.CancellationException) {
+            throw e
+        } catch (e: Throwable) {
+            app.lumio.player.crash.CrashReporter.logNonFatal("ArtworkTheme", e)
         }
     }
     val backdropBitmap = remember(artTheme) { artTheme?.backdrop?.asImageBitmap() }

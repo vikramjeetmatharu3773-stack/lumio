@@ -2,6 +2,7 @@ package app.lumio.player
 
 import android.app.Application
 import android.content.Context
+import app.lumio.player.crash.CrashReporter
 import app.lumio.player.util.ArtworkFetcher
 import app.lumio.player.util.ArtworkKeyer
 import coil.ImageLoader
@@ -14,6 +15,9 @@ class LumioApp : Application(), ImageLoaderFactory {
 
     override fun onCreate() {
         super.onCreate()
+        if (CrashReporter.isCrashProcess()) return
+        CrashReporter.init(this)
+        CrashReporter.install(this)
         try {
             container = AppContainer(this)
             container.start()

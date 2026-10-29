@@ -46,7 +46,7 @@ class BackdropState {
     fun update(bmp: ImageBitmap) {
         previous = current
         current = bmp
-        progress = if (previous == null) 1f else 0f
+        progress = 0f
     }
 }
 
@@ -71,7 +71,7 @@ fun BackdropEffect(state: BackdropState, bitmap: ImageBitmap?) {
     LaunchedEffect(bitmap) {
         if (bitmap == null) return@LaunchedEffect
         state.update(bitmap)
-        if (state.previous == null || !motion.enabled) {
+        if (!motion.enabled) {
             state.progress = 1f
             return@LaunchedEffect
         }

@@ -168,7 +168,7 @@ private fun HeroPager(items: List<Song>, onPlay: (Int) -> Unit, onLong: (Song) -
     ) { page ->
         val signed = (pager.currentPage - page) + pager.currentPageOffsetFraction
         val off = signed.absoluteValue.coerceIn(0f, 1f)
-        val song = items[page]
+        val song = items.getOrNull(page) ?: return@HorizontalPager
         Box(
             Modifier.fillMaxSize().graphicsLayer {
                 val sc = lerp(0.88f, 1f, 1f - off)

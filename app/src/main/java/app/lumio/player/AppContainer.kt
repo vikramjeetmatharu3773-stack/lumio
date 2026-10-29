@@ -14,6 +14,8 @@ import app.lumio.player.playback.SleepTimerController
 import app.lumio.player.widget.NowPlayingWidget
 import androidx.glance.appwidget.updateAll
 import android.util.Log
+import app.lumio.player.crash.CrashReporter
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
@@ -25,7 +27,7 @@ import kotlinx.coroutines.launch
 
 /** Manual DI: one instance per process, created in LumioApp. Spec: docs/02_ARCHITECTURE.md */
 class AppContainer(val app: Application) {
-    val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+    val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default + CoroutineExceptionHandler { _, e -> CrashReporter.logNonFatal("AppScope", e) })
 
     val db: AppDatabase by lazy { AppDatabase.build(app) }
     val settings: SettingsRepository by lazy { SettingsRepository(app) }

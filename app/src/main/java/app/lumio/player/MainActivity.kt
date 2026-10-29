@@ -8,19 +8,25 @@ import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import app.lumio.player.ui.nav.AppRoot
 import kotlinx.coroutines.flow.MutableStateFlow
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     private val _openPlayer = MutableStateFlow(0)
     private val openPlayer: StateFlow<Int> = _openPlayer
+    private val ready = MutableStateFlow(false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
+        val splash = installSplashScreen()
+        splash.setKeepOnScreenCondition { !ready.value }
+        lifecycleScope.launch { delay(1800); ready.value = true } // safety: never hang on splash
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         applicationContext.container.player.connect()
         handleIntent(intent)
-        setContent { AppRoot(openPlayer) }
+        setContent { AppRoot(openPlayer) { ready.value = true } }
     }
 
     override fun onNewIntent(intent: Intent) {
