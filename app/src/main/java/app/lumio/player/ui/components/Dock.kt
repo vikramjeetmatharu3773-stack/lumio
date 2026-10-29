@@ -1,5 +1,20 @@
 package app.lumio.player.ui.components
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Size
+import androidx.compose.ui.graphics.drawScope.drawRoundRect
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.Dp
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
@@ -48,6 +63,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.lumio.player.data.model.Song
 import app.lumio.player.data.settings.DockStyle
 import app.lumio.player.ui.theme.LocalMotion
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.StateFlow
 import kotlin.math.abs
 import kotlin.math.sin
@@ -168,7 +184,7 @@ private fun MusicBeatLine(modifier: Modifier = Modifier, playing: Boolean = true
     LaunchedEffect(playing) {
         if (playing) {
             while (true) {
-                withFrameNanos { frameTimeNanos -> t += 0.08f }
+                withFrameNanos { _: Long -> t += 0.08f }
                 delay(16)
             }
         }
@@ -182,7 +198,7 @@ private fun MusicBeatLine(modifier: Modifier = Modifier, playing: Boolean = true
         val count = (w / (barW + barGap)).toInt().coerceAtLeast(4).coerceAtMost(12)
         repeat(count) { i ->
             val x = i.toFloat() * (barW + barGap) + barGap / 2
-            val beat = sin(t + i * 0.7f).absoluteValue.coerceIn(0.3f, 1f)
+            val beat = abs(sin(t + i * 0.7f)).coerceIn(0.3f, 1f)
             val barH = h * beat
             val y = (h - barH) / 2f
             drawRoundRect(

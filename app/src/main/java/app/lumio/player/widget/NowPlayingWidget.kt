@@ -17,7 +17,6 @@ import androidx.glance.LocalContext
 import androidx.glance.LocalSize
 import androidx.glance.action.ActionParameters
 import androidx.glance.action.clickable
-import androidx.glance.clip.GlanceClip
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
@@ -96,29 +95,29 @@ private fun WidgetBody(
             size.width >= 200.dp && size.height >= 200.dp -> Column(
                 GlanceModifier.fillMaxSize().padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                if (art != null) { Image(ImageProvider(art), null, GlanceModifier.size(170.dp), contentScale = ContentScale.Fit); Spacer(GlanceModifier.height(10.dp)) }
+                if (art != null) { Image(ImageProvider(art), null, GlanceModifier.size(170.dp), contentScale = ContentScale.Fit); Spacer(GlanceModifier.height(14.dp)) }
                 Text(title, style = TextStyle(color = fgProv, fontSize = 17.sp, fontWeight = FontWeight.Bold), maxLines = 1)
                 Text(artist, style = TextStyle(color = fgProv, fontSize = 13.sp), maxLines = 1)
                 if (cfg.showControls) {
-                    Spacer(GlanceModifier.height(12.dp))
+                    Spacer(GlanceModifier.height(16.dp))
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Btn(R.drawable.ic_w_shuffle, "Shuffle", 40.dp, fg, actionRunCallback<ShuffleAction>()); Spacer(GlanceModifier.width(10.dp))
-                        Btn(R.drawable.ic_w_prev, "Previous", 44.dp, fg, actionRunCallback<PrevAction>()); Spacer(GlanceModifier.width(10.dp))
-                        Btn(if (playing) R.drawable.ic_w_pause else R.drawable.ic_w_play, "Play or pause", 56.dp, fg, actionRunCallback<PlayPauseAction>()); Spacer(GlanceModifier.width(10.dp))
+                        Btn(R.drawable.ic_w_shuffle, "Shuffle", 40.dp, fg, actionRunCallback<ShuffleAction>()); Spacer(GlanceModifier.width(12.dp))
+                        Btn(R.drawable.ic_w_prev, "Previous", 44.dp, fg, actionRunCallback<PrevAction>()); Spacer(GlanceModifier.width(12.dp))
+                        Btn(if (playing) R.drawable.ic_w_pause else R.drawable.ic_w_play, "Play or pause", 60.dp, fg, actionRunCallback<PlayPauseAction>()); Spacer(GlanceModifier.width(12.dp))
                         Btn(R.drawable.ic_w_next, "Next", 44.dp, fg, actionRunCallback<NextAction>())
                     }
                 }
             }
             size.width >= 200.dp -> Row(GlanceModifier.fillMaxSize().padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
-                if (art != null) { Image(ImageProvider(art), null, GlanceModifier.size(84.dp), contentScale = ContentScale.Fit); Spacer(GlanceModifier.width(12.dp)) }
+                if (art != null) { Image(ImageProvider(art), null, GlanceModifier.size(84.dp), contentScale = ContentScale.Fit); Spacer(GlanceModifier.width(14.dp)) }
                 Column(GlanceModifier.defaultWeight()) {
                     Text(title, style = TextStyle(color = fgProv, fontSize = 15.sp, fontWeight = FontWeight.Bold), maxLines = 1)
                     Text(artist, style = TextStyle(color = fgProv, fontSize = 12.sp), maxLines = 1)
                     if (cfg.showControls) {
-                        Spacer(GlanceModifier.height(8.dp))
+                        Spacer(GlanceModifier.height(10.dp))
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Btn(R.drawable.ic_w_prev, "Previous", 38.dp, fg, actionRunCallback<PrevAction>()); Spacer(GlanceModifier.width(8.dp))
-                            Btn(if (playing) R.drawable.ic_w_pause else R.drawable.ic_w_play, "Play or pause", 44.dp, fg, actionRunCallback<PlayPauseAction>()); Spacer(GlanceModifier.width(8.dp))
+                            Btn(R.drawable.ic_w_prev, "Previous", 38.dp, fg, actionRunCallback<PrevAction>()); Spacer(GlanceModifier.width(10.dp))
+                            Btn(if (playing) R.drawable.ic_w_pause else R.drawable.ic_w_play, "Play or pause", 48.dp, fg, actionRunCallback<PlayPauseAction>()); Spacer(GlanceModifier.width(10.dp))
                             Btn(R.drawable.ic_w_next, "Next", 38.dp, fg, actionRunCallback<NextAction>())
                         }
                     }
@@ -128,9 +127,9 @@ private fun WidgetBody(
                 Row(GlanceModifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                     if (art != null) Image(ImageProvider(art), null, GlanceModifier.size(52.dp), contentScale = ContentScale.Fit) else Image(ImageProvider(R.drawable.ic_w_note), null, GlanceModifier.size(40.dp), colorFilter = ColorFilter.tint(fgProv))
                     Spacer(GlanceModifier.defaultWeight())
-                    if (cfg.showControls) Btn(if (playing) R.drawable.ic_w_pause else R.drawable.ic_w_play, "Play or pause", 44.dp, fg, actionRunCallback<PlayPauseAction>())
+                    if (cfg.showControls) Btn(if (playing) R.drawable.ic_w_pause else R.drawable.ic_w_play, "Play or pause", 48.dp, fg, actionRunCallback<PlayPauseAction>())
                 }
-                Spacer(GlanceModifier.height(6.dp))
+                Spacer(GlanceModifier.height(8.dp))
                 Text(title, style = TextStyle(color = fgProv, fontSize = 13.sp, fontWeight = FontWeight.Bold), maxLines = 1)
                 Text(artist, style = TextStyle(color = fgProv, fontSize = 11.sp), maxLines = 1)
             }
@@ -140,13 +139,7 @@ private fun WidgetBody(
 
 @Composable
 private fun Btn(icon: Int, desc: String, size: androidx.compose.ui.unit.Dp, tint: Color, action: androidx.glance.action.Action) {
-    Box(
-        GlanceModifier.size(size)
-            .background(ImageProvider(R.drawable.w_btn_bg))
-            .clip(GlanceClip.roundedCorners(size / 2))
-            .clickable(action),
-        contentAlignment = Alignment.Center
-    ) {
+    Box(GlanceModifier.size(size).background(ImageProvider(R.drawable.w_btn_bg)).clickable(action), contentAlignment = Alignment.Center) {
         Image(ImageProvider(icon), desc, GlanceModifier.size(size * 0.55f), colorFilter = ColorFilter.tint(ColorProvider(tint)))
     }
 }
