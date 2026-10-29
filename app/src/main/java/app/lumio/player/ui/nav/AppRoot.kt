@@ -183,7 +183,7 @@ private fun MainContent(s: AppSettings, openPlayerRequests: StateFlow<Int>) {
         Box(Modifier.fillMaxSize()) {
             AppNavHost(nav, ::navigate)
 
-            val showDock = route != Routes.EQUALIZER && route != Routes.FOLDERS && route?.startsWith("settings/") != true
+            val showDock = route != Routes.EQUALIZER && route != Routes.FOLDERS
             if (showDock) {
                 GlassDock(
                     currentRoute = route,

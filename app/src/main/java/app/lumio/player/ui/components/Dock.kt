@@ -49,6 +49,8 @@ import app.lumio.player.data.model.Song
 import app.lumio.player.data.settings.DockStyle
 import app.lumio.player.ui.theme.LocalMotion
 import kotlinx.coroutines.flow.StateFlow
+import kotlin.math.abs
+import kotlin.math.sin
 
 /** Floating glass dock. STACKED = mini player above a 3-button capsule. CLASSIC = Home | mini player | Search (Echo-like). */
 @Composable
@@ -93,10 +95,10 @@ fun GlassDock(
                 }
             }
         } else {
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
-                GlassIconButton(Icons.Rounded.Home, "Home", onHome, size = 64.dp, selected = route.startsWith("home"))
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                GlassIconButton(Icons.Rounded.Home, "Home", onHome, size = 50.dp, selected = route.startsWith("home"))
                 Box(Modifier.weight(1f)) { if (song != null) mini(Modifier.fillMaxWidth()) }
-                GlassIconButton(Icons.Rounded.Search, "Search", onSearch, size = 64.dp, selected = route.startsWith("search"))
+                GlassIconButton(Icons.Rounded.Search, "Search", onSearch, size = 50.dp, selected = route.startsWith("search"))
             }
         }
     }
@@ -156,6 +158,40 @@ fun MiniPlayer(
             IconButton(onClick = onNext) { Icon(Icons.Rounded.SkipNext, "Next", tint = on) }
         }
         MiniProgress(position, durationMs, Modifier.align(Alignment.BottomCenter).padding(horizontal = 26.dp))
+        if (isPlaying) MusicBeatLine(Modifier.align(Alignment.BottomCenter).padding(horizontal = 26.dp).height(24.dp), isPlaying)
+    }
+}
+
+@Composable
+private fun MusicBeatLine(modifier: Modifier = Modifier, playing: Boolean = true) {
+    val t by remember { mutableFloatStateOf(0f) }
+    LaunchedEffect(playing) {
+        if (playing) {
+            while (true) {
+                withFrameNanos { frameTimeNanos -> t += 0.08f }
+                delay(16)
+            }
+        }
+    }
+    Canvas(modifier) {
+        val w = size.width
+        val h = size.height
+        val accent = MaterialTheme.colorScheme.primary
+        val barW = 2f
+        val barGap = 3f
+        val count = (w / (barW + barGap)).toInt().coerceAtLeast(4).coerceAtMost(12)
+        repeat(count) { i ->
+            val x = i.toFloat() * (barW + barGap) + barGap / 2
+            val beat = sin(t + i * 0.7f).absoluteValue.coerceIn(0.3f, 1f)
+            val barH = h * beat
+            val y = (h - barH) / 2f
+            drawRoundRect(
+                accent.copy(alpha = 0.85f),
+                size = Size(barW, barH),
+                topLeft = Offset(x, y),
+                cornerRadius = CornerRadius(barW / 2, barW / 2),
+            )
+        }
     }
 }
 
