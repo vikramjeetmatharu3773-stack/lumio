@@ -1,7 +1,17 @@
 package app.lumio.player.ui.components
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.Dp
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -18,6 +28,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -35,15 +46,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.lumio.player.data.model.Song
 import app.lumio.player.data.settings.DockStyle
@@ -69,13 +73,13 @@ fun GlassDock(
     modifier: Modifier = Modifier,
 ) {
     val motion = LocalMotion.current
-    val lastSong = rememberLastNonNull(song)
+    val lastSong = remember { song }
     val route = currentRoute.orEmpty()
     val mini: @Composable (Modifier) -> Unit = { m ->
         if (lastSong != null) MiniPlayer(lastSong, isPlaying, position, durationMs, onOpenPlayer, onToggle, onNext, onPrevious, m)
     }
     Column(
-        modifier.fillMaxWidth().padding(horizontal = 16.dp).navigationBarsPadding().padding(bottom = 8.dp),
+        modifier = modifier.fillMaxWidth().padding(horizontal = 16.dp).navigationBarsPadding().padding(bottom = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
@@ -93,10 +97,10 @@ fun GlassDock(
                 }
             }
         } else {
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
-                GlassIconButton(Icons.Rounded.Home, "Home", onHome, size = 64.dp, selected = route.startsWith("home"))
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                GlassIconButton(Icons.Rounded.Home, "Home", onHome, size = 50.dp, selected = route.startsWith("home"))
                 Box(Modifier.weight(1f)) { if (song != null) mini(Modifier.fillMaxWidth()) }
-                GlassIconButton(Icons.Rounded.Search, "Search", onSearch, size = 64.dp, selected = route.startsWith("search"))
+                GlassIconButton(Icons.Rounded.Search, "Search", onSearch, size = 50.dp, selected = route.startsWith("search"))
             }
         }
     }
@@ -128,26 +132,24 @@ fun MiniPlayer(
 ) {
     val on = MaterialTheme.colorScheme.onSurface
     GlassSurface(
-        modifier = modifier.height(64.dp),
+        modifier = modifier
+            .height(64.dp)
+            .pointerInput(Unit) {
+                var acc = 0f
+                detectHorizontalDragGestures(
+                    onDragStart = { acc = 0f },
+                    onDragEnd = { if (acc < -100f) onNext() else if (acc > 100f) onPrevious() },
+                    onDragCancel = {},
+                    onHorizontalDrag = { _, d -> acc += d },
+                )
+            },
         shape = RoundedCornerShape(50),
         onClick = onClick,
     ) {
         Row(
-            Modifier
-                .fillMaxSize()
-                .pointerInput(Unit) {
-                    var acc = 0f
-                    detectHorizontalDragGestures(
-                        onDragStart = { acc = 0f },
-                        onDragEnd = { if (acc < -100f) onNext() else if (acc > 100f) onPrevious() },
-                        onDragCancel = {},
-                        onHorizontalDrag = { _, d -> acc += d },
-                    )
-                }
-                .padding(start = 10.dp, end = 6.dp),
+            Modifier.fillMaxSize().padding(start = 10.dp, end = 6.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            ArtworkImage(song.uri, Modifier.size(44.dp), CircleShape)
             Column(Modifier.weight(1f).padding(horizontal = 12.dp)) {
                 Text(song.title, style = MaterialTheme.typography.titleSmall, color = on, maxLines = 1, modifier = Modifier.basicMarquee())
                 Text(song.artist, style = MaterialTheme.typography.bodySmall, color = on.copy(alpha = 0.7f), maxLines = 1)
@@ -156,6 +158,25 @@ fun MiniPlayer(
             IconButton(onClick = onNext) { Icon(Icons.Rounded.SkipNext, "Next", tint = on) }
         }
         MiniProgress(position, durationMs, Modifier.align(Alignment.BottomCenter).padding(horizontal = 26.dp))
+        if (isPlaying) MusicBeatLine(Modifier.align(Alignment.BottomCenter).padding(horizontal = 26.dp).height(24.dp), isPlaying)
+    }
+}
+
+@Composable
+private fun MusicBeatLine(modifier: Modifier = Modifier, playing: Boolean = true) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(3.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        repeat(4) { i ->
+            Box(
+                Modifier
+                    .width(2.dp)
+                    .height(12.dp)
+                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.85f), CircleShape)
+            )
+        }
     }
 }
 

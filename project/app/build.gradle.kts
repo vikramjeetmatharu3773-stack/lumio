@@ -6,6 +6,7 @@ plugins {
 }
 
 import java.util.Properties
+import java.io.File
 
 android {
     namespace = "app.lumio.player"
@@ -21,12 +22,27 @@ android {
         vectorDrawables { useSupportLibrary = true }
     }
 
+    signingConfigs {
+        create("release") {
+            val signingProps = File(rootProject.projectDir, "signing.properties")
+            val props = Properties()
+            if (signingProps.exists()) {
+                signingProps.inputStream().use { props.load(it) }
+            }
+            storeFile = File(rootProject.projectDir, props.getProperty("keystore", "release.keystore"))
+            storePassword = props.getProperty("storePassword", System.getenv("RELEASE_STORE_PASSWORD") ?: "")
+            keyAlias = props.getProperty("keyAlias", System.getenv("RELEASE_KEY_ALIAS") ?: "lumio")
+            keyPassword = props.getProperty("keyPassword", System.getenv("RELEASE_KEY_PASSWORD") ?: "")
+        }
+    }
+
     buildTypes {
         debug {
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-debug"
         }
         release {
+            signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")

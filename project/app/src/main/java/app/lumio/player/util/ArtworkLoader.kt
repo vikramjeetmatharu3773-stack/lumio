@@ -14,7 +14,7 @@ object ArtworkLoader {
         val uri = Uri.parse(songUri)
         if (Build.VERSION.SDK_INT >= 29) {
             try {
-                return context.contentResolver.loadThumbnail(uri, Size(size, size), null)
+                return toSoftware(context.contentResolver.loadThumbnail(uri, Size(size, size), null))
             } catch (_: Exception) { /* no art or unsupported: fall through */ }
         }
         val r = MediaMetadataRetriever()
@@ -27,6 +27,9 @@ object ArtworkLoader {
             try { r.release() } catch (_: Exception) {}
         }
     }
+
+    private fun toSoftware(b: Bitmap): Bitmap =
+        if (Build.VERSION.SDK_INT >= 26 && b.config == Bitmap.Config.HARDWARE) (b.copy(Bitmap.Config.ARGB_8888, false) ?: b) else b
 
     private fun decodeSampled(data: ByteArray, target: Int): Bitmap? {
         val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }

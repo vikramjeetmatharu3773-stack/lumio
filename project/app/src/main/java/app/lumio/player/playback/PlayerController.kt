@@ -14,6 +14,7 @@ import androidx.media3.common.PlaybackParameters
 import androidx.media3.common.Player
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
+import app.lumio.player.crash.CrashReporter
 import app.lumio.player.data.db.AppDatabase
 import app.lumio.player.data.db.HistoryEntity
 import app.lumio.player.data.model.Song
@@ -175,6 +176,10 @@ class PlayerController(
     // ------------------------------------------------------------------ listener / state
     private val listener = object : Player.Listener {
         override fun onEvents(player: Player, events: Player.Events) {
+            try { handleEvents(player, events) } catch (e: Exception) { CrashReporter.logNonFatal("PlayerEvents", e) }
+        }
+
+        private fun handleEvents(player: Player, events: Player.Events) {
             val structural = events.containsAny(Player.EVENT_TIMELINE_CHANGED, Player.EVENT_MEDIA_ITEM_TRANSITION)
             if (events.contains(Player.EVENT_MEDIA_ITEM_TRANSITION)) onTrackChanged(player)
             if (events.contains(Player.EVENT_IS_PLAYING_CHANGED) && player.isPlaying) consecutiveErrors = 0
@@ -227,19 +232,23 @@ class PlayerController(
         scope.launch(Dispatchers.Main.immediate) {
             var last = SystemClock.elapsedRealtime()
             while (isActive) {
-                val c = controller
-                val now = SystemClock.elapsedRealtime()
                 var playing = false
-                if (c != null) {
-                    playing = c.isPlaying
-                    if (playing) {
-                        listenedMs += now - last
-                        val d = c.duration
-                        if (d > 0) currentDuration = d
+                try {
+                    val c = controller
+                    val now = SystemClock.elapsedRealtime()
+                    if (c != null) {
+                        playing = c.isPlaying
+                        if (playing) {
+                            listenedMs += now - last
+                            val d = c.duration
+                            if (d > 0) currentDuration = d
+                        }
+                        _position.value = c.currentPosition
                     }
-                    _position.value = c.currentPosition
+                    last = now
+                } catch (e: Exception) {
+                    CrashReporter.logNonFatal("Ticker", e)
                 }
-                last = now
                 delay(if (playing) 250 else 700)
             }
         }
