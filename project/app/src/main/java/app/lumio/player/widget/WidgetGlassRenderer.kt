@@ -46,7 +46,7 @@ object WidgetGlassRenderer {
     fun render(art: Bitmap?, w: Int, h: Int, cfg: WidgetConfig, accent: Int, pxPerDp: Float): Bitmap {
         val out = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
         val c = Canvas(out)
-        val r = cfg.corner * pxPerDp
+        val r = (cfg.corner * pxPerDp).coerceAtLeast(0f)
         val rect = RectF(0f, 0f, w.toFloat(), h.toFloat())
         val path = Path().apply { addRoundRect(rect, r, r, Path.Direction.CW) }
         c.clipPath(path)
@@ -85,14 +85,14 @@ object WidgetGlassRenderer {
             shader = LinearGradient(0f, 0f, 0f, h.toFloat(), intArrayOf(Color.argb(150, 255, 255, 255), Color.argb(20, 255, 255, 255), Color.argb(70, 255, 255, 255)), null, Shader.TileMode.CLAMP)
         }
         val inset = stroke / 2
-        c.drawRoundRect(RectF(inset, inset, w - inset, h - inset), r, r, border)
+        c.drawRoundRect(RectF(inset, inset, w - inset, h - inset), r.coerceAtLeast(0f), r.coerceAtLeast(0f), border)
         return out
     }
 
     fun roundedArt(art: Bitmap, sizePx: Int, radiusPx: Float): Bitmap {
         val out = Bitmap.createBitmap(sizePx, sizePx, Bitmap.Config.ARGB_8888)
         val c = Canvas(out)
-        c.clipPath(Path().apply { addRoundRect(RectF(0f, 0f, sizePx.toFloat(), sizePx.toFloat()), radiusPx, radiusPx, Path.Direction.CW) })
+        c.clipPath(Path().apply { addRoundRect(RectF(0f, 0f, sizePx.toFloat(), sizePx.toFloat()), radiusPx.coerceAtLeast(0f), radiusPx.coerceAtLeast(0f), Path.Direction.CW) })
         c.drawBitmap(art, coverMatrix(art.width, art.height, sizePx, sizePx), Paint(Paint.FILTER_BITMAP_FLAG))
         return out
     }
