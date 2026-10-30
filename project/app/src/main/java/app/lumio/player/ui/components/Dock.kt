@@ -73,10 +73,9 @@ fun GlassDock(
     modifier: Modifier = Modifier,
 ) {
     val motion = LocalMotion.current
-    val lastSong = remember { song }
     val route = currentRoute.orEmpty()
     val mini: @Composable (Modifier) -> Unit = { m ->
-        if (lastSong != null) MiniPlayer(lastSong, isPlaying, position, durationMs, onOpenPlayer, onToggle, onNext, onPrevious, m)
+        if (song != null) MiniPlayer(song, isPlaying, position, durationMs, onOpenPlayer, onToggle, onNext, onPrevious, m)
     }
     Column(
         modifier = modifier.fillMaxWidth().padding(horizontal = 16.dp).navigationBarsPadding().padding(bottom = 8.dp),
