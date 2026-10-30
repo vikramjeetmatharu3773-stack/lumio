@@ -98,7 +98,7 @@ fun GlassDock(
         } else {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
                 GlassIconButton(Icons.Rounded.Home, "Home", onHome, size = 50.dp, selected = route.startsWith("home"))
-                Box(Modifier.weight(1f)) { if (song != null) mini(Modifier.fillMaxWidth()) }
+                Box(Modifier.weight(1f).fillMaxWidth()) { if (song != null) mini(Modifier.fillMaxWidth()) }
                 GlassIconButton(Icons.Rounded.Search, "Search", onSearch, size = 50.dp, selected = route.startsWith("search"))
             }
         }
