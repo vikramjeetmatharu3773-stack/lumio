@@ -47,7 +47,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.lumio.player.data.model.Song
 import app.lumio.player.data.settings.DockStyle
 import app.lumio.player.ui.theme.LocalMotion
@@ -160,7 +159,7 @@ fun MiniPlayer(
             Column(
                 Modifier.weight(1f).padding(horizontal = 12.dp),
             ) {
-                Text(song.title, style = MaterialTheme.typography.titleSmall, color = on, maxLines = 1, modifier = Modifier.basicMarquee())
+                Text(song.title, style = MaterialTheme.typography.titleSmall, color = on, maxLines = 1, overflow = TextOverflow.Marquee)
                 Text(song.artist, style = MaterialTheme.typography.bodySmall, color = on.copy(alpha = 0.7f), maxLines = 1)
             }
             // Only play/pause button on right — no next/previous buttons
@@ -200,7 +199,7 @@ private fun MusicBeatLine(modifier: Modifier = Modifier, playing: Boolean = true
 
 @Composable
 private fun MiniProgress(position: StateFlow<Long>, durationMs: Long, modifier: Modifier) {
-    val pos by position.collectAsStateWithLifecycle()
+    val pos by position.collectAsState()
     val accent = MaterialTheme.colorScheme.primary
     val f = if (durationMs > 0) (pos.toFloat() / durationMs).coerceIn(0f, 1f) else 0f
     Canvas(modifier.fillMaxWidth().height(3.dp)) {
