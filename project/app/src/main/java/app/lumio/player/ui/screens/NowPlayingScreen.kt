@@ -82,8 +82,8 @@ fun NowPlayingSheet(progress: Animatable<Float, AnimationVector1D>, onNavigate: 
         Box(
             Modifier.fillMaxSize().graphicsLayer {
                 translationY = (1f - progress.value) * hPx
-                val r = (1f - progress.value) * 28.dp.toPx()
-                shape = RoundedCornerShape(topStart = r, topEnd = r, bottomEnd = 0f, bottomStart = 0f)
+                val r = ((1f - progress.value).coerceAtLeast(0f)) * 28.dp.toPx()
+                shape = RoundedCornerShape(topStart = r.coerceAtLeast(0f), topEnd = r.coerceAtLeast(0f), bottomEnd = 0f, bottomStart = 0f)
                 clip = true
             }
         ) {
