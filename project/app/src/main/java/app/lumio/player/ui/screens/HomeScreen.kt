@@ -141,10 +141,10 @@ fun HomeScreen(onNavigate: (String) -> Unit) {
 private fun HomeHeader(showLibrary: Boolean, onNavigate: (String) -> Unit) {
     val on = MaterialTheme.colorScheme.onSurface
     Row(
-        Modifier.fillMaxWidth().statusBarsPadding().padding(start = 20.dp, end = 24.dp, top = 20.dp, bottom = 16.dp),
+        Modifier.fillMaxWidth().statusBarsPadding().padding(start = 20.dp, end = 32.dp, top = 28.dp, bottom = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text("Lumio", style = MaterialTheme.typography.headlineSmall, color = on, modifier = Modifier.weight(1f).maxLines(1))
+        Text("Lumio", style = MaterialTheme.typography.titleMedium, color = on, modifier = Modifier.weight(1f).maxLines(1), overflow = TextOverflow.Ellipsis)
         GlassSurface(shape = RoundedCornerShape(50)) {
             Row(Modifier.padding(horizontal = 4.dp)) {
                 if (showLibrary) IconButton(onClick = { onNavigate(Routes.library()) }) { Icon(Icons.Rounded.LibraryMusic, "Library", tint = on) }
