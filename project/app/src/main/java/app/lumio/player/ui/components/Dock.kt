@@ -1,18 +1,7 @@
 package app.lumio.player.ui.components
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.Dp
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -28,26 +17,36 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Pause
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.LibraryMusic
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.LibraryMusic
 import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material.icons.rounded.SkipNext
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.lumio.player.data.model.Song
 import app.lumio.player.data.settings.DockStyle
@@ -117,6 +116,7 @@ private fun DockItem(filled: ImageVector, outlined: ImageVector, label: String, 
     }
 }
 
+/** Redesigned MiniPlayer: artwork image on left, song name in middle, only play/pause button on right. Drag left/right to change songs. */
 @Composable
 fun MiniPlayer(
     song: Song,
@@ -130,6 +130,7 @@ fun MiniPlayer(
     modifier: Modifier = Modifier,
 ) {
     val on = MaterialTheme.colorScheme.onSurface
+    val ctx = LocalContext.current
     GlassSurface(
         modifier = modifier
             .height(64.dp)
@@ -146,19 +147,37 @@ fun MiniPlayer(
         onClick = onClick,
     ) {
         Row(
-            Modifier.fillMaxSize().padding(start = 10.dp, end = 6.dp),
+            Modifier.fillMaxSize().padding(start = 10.dp, end = 10.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Column(Modifier.weight(1f).padding(horizontal = 12.dp)) {
+            // Artwork image on left
+            Box(
+                Modifier.size(44.dp).clip(RoundedCornerShape(12.dp)),
+                contentAlignment = Alignment.Center,
+            ) {
+                ArtworkImage(song.uri, Modifier.fillMaxSize(), shape = RoundedCornerShape(12.dp))
+            }
+            Column(
+                Modifier.weight(1f).padding(horizontal = 12.dp),
+            ) {
                 Text(song.title, style = MaterialTheme.typography.titleSmall, color = on, maxLines = 1, modifier = Modifier.basicMarquee())
                 Text(song.artist, style = MaterialTheme.typography.bodySmall, color = on.copy(alpha = 0.7f), maxLines = 1)
             }
+            // Only play/pause button on right — no next/previous buttons
             IconButton(onClick = onToggle) { PlayPauseIcon(isPlaying, on, 30.dp) }
-            IconButton(onClick = onNext) { Icon(Icons.Rounded.SkipNext, "Next", tint = on) }
         }
         MiniProgress(position, durationMs, Modifier.align(Alignment.BottomCenter).padding(horizontal = 26.dp))
         if (isPlaying) MusicBeatLine(Modifier.align(Alignment.BottomCenter).padding(horizontal = 26.dp).height(24.dp), isPlaying)
     }
+}
+
+@Composable
+private fun PlayPauseIcon(isPlaying: Boolean, color: Color, size: Dp) {
+    val drawable = if (isPlaying)
+        androidx.compose.material.icons.filled.Pause
+    else
+        androidx.compose.material.icons.filled.PlayArrow
+    Icon(drawable, null, tint = color, modifier = Modifier.size(size))
 }
 
 @Composable
